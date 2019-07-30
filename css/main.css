@@ -71,7 +71,7 @@
     left: 50%;
     -webkit-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
-    width: 35%;
+    width: 30%;
     background-color: white;
     border-radius: 5px;
     border: 3px solid rgb(32, 175, 194);
@@ -124,5 +124,7 @@
 }
 .modal-comment {
     margin-top: 15px;
-
+}
+.input {
+    width: 90%;
 }
