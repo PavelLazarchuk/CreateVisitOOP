@@ -35,13 +35,12 @@ class Visit {
         for (let i = 0; i < inputs.length; i++) {
             inputs[i].value = '';
         }
-
+        document.getElementById('select').options[0].selected = 'selected';
     }
     static hiddenInput () {
         pressure.style.display = 'none';
         indexWeight.style.display = 'none';
         illness.style.display = 'none';
-        age.style.display = 'none';
         age.style.display = 'none';
         lastDateVisit.style.display = 'none';
     }
@@ -73,10 +72,16 @@ class Visit {
     }
 }
 Visit.hiddenInput();
-const modal = new Visit(purpose, date, userName, comment);
+const modalVisit = new Visit(purpose, date, userName, comment);
 
 const button = document.getElementById("createModal");
-button.addEventListener("click", modal.open.bind(modal));
+document.addEventListener('click', function(event) {
+    const modal = document.getElementById('modal');
+    if (!modal.contains(event.target) && !button.contains(event.target)) {
+        modalVisit.close();
+    }
+});
+button.addEventListener("click", modalVisit.open.bind(modalVisit));
 
 class Сardiologist extends Visit {
     constructor(purposeVisit, normalPressure, massIndex, pastIllnesses, age,  fullName, dateVisit, comment) {
