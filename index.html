@@ -10,26 +10,44 @@
 </head>
 
 <body>
-    <div class="body-background">
+    <div class="body-background" id="back">
         <div class="container">
             <header class="header">
                 <div class="header-flex">
                     <img src="img/doctor.jpg" class="header-logo">
-                    <button class="header-create">Create Visit</button>
+                    <button class="header-create" id="createModal">Create Visit</button>
                 </div>
             </header>
 
-            <main class="main">
+            <main class="main" id="mainId">
                 <div class="main-flex">
-                    <div class="main-card"></div>
-                    <div class="main-card"></div>
-                    <div class="main-card"></div>
-                    <div class="main-card"></div>
+                    <p id="main-text">No items have been added</p>
+                    <div class='modal-position' id="modal">
+                        <p class='modal-text-position'>Введите имя: </p>
+                        <input id='userName' type='text'>
+                        <p class='modal-text-position'>Введите дату визита: </p>
+                        <input type='text' id='date'>
+                        <p>
+                            <select class='select-style' size='1' name="doctor[]">
+                            <option disabled selected>Выберите врача</option>
+                            <option value="Кардиолог">Кардиолог</option>
+                            <option value="Терапевт">Терапевт</option>
+                            <option value="Дантист">Дантист</option>
+                           </select>
+                        </p>
+                        <button id='closeModal' class='close-modal' onclick='modal.close()'>X</button>
+                        <button id='createVisit' class='btn-visit'>Записаться к врачу</button>
+                        <textarea name="" id="" cols="30" rows="10"></textarea>
+                    </div>
+<!--                    <div class="main-card"></div>-->
+<!--                    <div class="main-card"></div>-->
+<!--                    <div class="main-card"></div>-->
+<!--                    <div class="main-card"></div>-->
                 </div>
             </main>
         </div>
-
+    </div>
         <script src="js/index.js"></script>
-</body>
 
+</body>
 </html>
