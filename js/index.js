@@ -68,11 +68,14 @@ class Visit {
         }
     }
     createVisit(){
-
+        let divCard = document.createElement("div");
+        divCard.innerHTML = "";
+        divCard.classList.add("");
+        document.getElementById("mainId").appendChild(divCard);
     }
 }
 Visit.hiddenInput();
-const modalVisit = new Visit(purpose, date, userName, comment);
+const modalVisit = new Visit();
 
 const button = document.getElementById("createModal");
 document.addEventListener('click', function(event) {
@@ -83,7 +86,7 @@ document.addEventListener('click', function(event) {
 });
 button.addEventListener("click", modalVisit.open.bind(modalVisit));
 
-class Сardiologist extends Visit {
+class Cardiologist extends Visit {
     constructor(purposeVisit, normalPressure, massIndex, pastIllnesses, age,  fullName, dateVisit, comment) {
         super(purposeVisit, fullName, dateVisit, comment);
         this._normalPressure = normalPressure;
@@ -105,6 +108,24 @@ class Dentist extends Visit {
     }
 }
 
-// const purpose = document.getElementById('purpose').value
-// let newVisit
-// if(select.value ==='dantist') newVisit = new Dentist(purpose)
+
+let newVisit;
+document.getElementById("createVisit").addEventListener('click', function () {
+    if(select.value ==='Дантист') {
+        newVisit = new Dentist(purpose.value, lastDateVisit.value, userName.value,
+            date.value, comment.value);
+        console.log(newVisit);
+    }
+    if(select.value ==='Терапевт') {
+        newVisit = new Therapist(purpose.value, age.value, userName.value,
+            date.value, comment.value);
+    }
+    if(select.value ==='Кардиолог') {
+        newVisit = new Cardiologist(purpose.value, pressure.value, indexWeight.value,
+            illness.value, age.value, userName.value, date.value, comment.value);
+    }
+    modalVisit.close();
+    modalVisit.createVisit();
+});
+
+

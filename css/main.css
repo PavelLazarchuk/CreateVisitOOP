@@ -104,6 +104,10 @@
     top: 15px;
     right: 15px;
     padding: 5px 7px;
+    cursor: pointer;
+}
+.close-modal:hover {
+    border-color: black;
 }
 .btn-visit {
     padding: 7px;
@@ -113,6 +117,10 @@
     border: 1px solid darkslategrey;
     margin: 40px 20px 20px;
     align-self: center;
+    cursor: pointer;
+}
+.btn-visit:hover {
+    border-color: black;
 }
 .select-style {
     width: 250px;
