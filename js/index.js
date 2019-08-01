@@ -36,6 +36,11 @@ class Visit {
             inputs[i].value = '';
         }
         document.getElementById('select').options[0].selected = 'selected';
+        lastDateVisit.style.display = 'none';
+        age.style.display = 'none';
+        pressure.style.display = 'none';
+        indexWeight.style.display = 'none';
+        illness.style.display = 'none';
     }
     static hiddenInput () {
         pressure.style.display = 'none';
@@ -69,9 +74,9 @@ class Visit {
     }
     createVisit(){
         let divCard = document.createElement("div");
-        divCard.innerHTML = "";
-        divCard.classList.add("");
-        document.getElementById("mainId").appendChild(divCard);
+        divCard.innerHTML = `<p>${userName.value}</p><p>${sel.options[sel.selectedIndex].text}</p><button>Показать больше...</button>`;
+        divCard.classList.add("main-card");
+        document.getElementById("mainCardId").appendChild(divCard);
     }
 }
 Visit.hiddenInput();
@@ -119,10 +124,12 @@ document.getElementById("createVisit").addEventListener('click', function () {
     if(select.value ==='Терапевт') {
         newVisit = new Therapist(purpose.value, age.value, userName.value,
             date.value, comment.value);
+        console.log(newVisit);
     }
     if(select.value ==='Кардиолог') {
         newVisit = new Cardiologist(purpose.value, pressure.value, indexWeight.value,
             illness.value, age.value, userName.value, date.value, comment.value);
+        console.log(newVisit);
     }
     modalVisit.close();
     modalVisit.createVisit();
