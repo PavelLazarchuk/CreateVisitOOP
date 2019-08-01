@@ -10,7 +10,7 @@ const lastDateVisit = document.getElementById('lastDateVisit');
 const sel = document.getElementById('select');
 
 class Visit {
-    constructor(purposeVisit, dateVisit, fullName, comment) {
+    constructor(purposeVisit, fullName, dateVisit, comment) {
         this._purposeVisit = purposeVisit;
         this._fullName = fullName;
         this._dateVisit = dateVisit;
@@ -74,9 +74,13 @@ class Visit {
     }
     createVisit(){
         let divCard = document.createElement("div");
-        divCard.innerHTML = `<p>${userName.value}</p><p>${sel.options[sel.selectedIndex].text}</p><button>Показать больше...</button>`;
+        divCard.innerHTML = `<p>${userName.value}</p><p>${sel.options[sel.selectedIndex].text}</p><p>Цель визита: ${purpose.value}</p>
+<p>Дата визита: ${date.value}</p><p>Комментарий: ${comment.value}</p><p>Давление: ${pressure.value}</p><p>Индекс маси тела: ${indexWeight.value}</p><p>Заболевания: ${illness.value}</p><p>Возраст: ${age.value}</p><p>Дата последнего визита: ${lastDateVisit.value}</p><button onclick="modalVisit.visibleMove()">Показать больше...</button>`;
         divCard.classList.add("main-card");
         document.getElementById("mainCardId").appendChild(divCard);
+    }
+    visibleMove (){
+
     }
 }
 Visit.hiddenInput();
