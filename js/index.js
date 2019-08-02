@@ -74,12 +74,48 @@ class Visit {
     }
     createVisit(){
         let divCard = document.createElement("div");
-        divCard.innerHTML = `<p>${userName.value}</p><p>${sel.options[sel.selectedIndex].text}</p><p>Цель визита: ${purpose.value}</p>
-<p>Дата визита: ${date.value}</p><p>Комментарий: ${comment.value}</p><p>Давление: ${pressure.value}</p><p>Индекс маси тела: ${indexWeight.value}</p><p>Заболевания: ${illness.value}</p><p>Возраст: ${age.value}</p><p>Дата последнего визита: ${lastDateVisit.value}</p><button onclick="modalVisit.visibleMove()">Показать больше...</button>`;
+        divCard.innerHTML = `<p>${userName.value}</p>
+<p id="doctor">${select.value}</p>
+<p class="visit-visible">Цель визита: ${purpose.value}</p>
+<p class="visit-visible">Дата визита: ${date.value}</p>
+<p class="visit-cardio-visible">Давление: ${pressure.value}</p>
+<p class="visit-cardio-visible">Индекс маси тела: ${indexWeight.value}</p>
+<p class="visit-cardio-visible">Заболевания: ${illness.value}</p>
+<p class="visit-age-visible">Возраст: ${age.value}</p>
+<p class="visit-dantist-visible">Дата последнего визита: ${lastDateVisit.value}</p>
+<p class="visit-visible">Комментарий: ${comment.value}</p>
+<button id="closeCard" class="close-card" onclick="modalVisit.closeOneCard()">x</button>
+<button id='showMore' onclick="modalVisit.visibleMove()">Показать больше...</button>`;
         divCard.classList.add("main-card");
         document.getElementById("mainCardId").appendChild(divCard);
     }
     visibleMove (){
+        const showMore = document.getElementById('showMore');
+        const showCardіo = document.getElementsByClassName('visit-cardio-visible');
+        const showAge = document.getElementsByClassName('visit-age-visible');
+        showMore.style.display = "none";
+        const elemCard = document.getElementsByClassName('visit-visible');
+        for (let i = 0; i < elemCard.length; i+1) {
+            console.log(elemCard[i]);
+            elemCard[i].classList.remove('visit-visible');
+        }
+        if(document.getElementById('doctor').textContent === 'Кардиолог' ) {
+            for (let j = 0; j < showCardіo.length; j+1) {
+                console.log(showCardіo[j]);
+                showCardіo[j].classList.remove('visit-cardio-visible');
+            }
+
+            showAge.classList.remove('visit-age-visible');
+        }
+        if(document.getElementById('doctor').textContent === 'Терапевт' ) {
+            showAge.classList.remove('visit-age-visible');
+        }
+        if(document.getElementById('doctor').textContent === 'Дантист' ) {
+            showAge.classList.remove('visit-dantist-visible');
+        }
+
+    }
+    closeOneCard() {
 
     }
 }
@@ -93,6 +129,7 @@ document.addEventListener('click', function(event) {
         modalVisit.close();
     }
 });
+
 button.addEventListener("click", modalVisit.open.bind(modalVisit));
 
 class Cardiologist extends Visit {
@@ -103,6 +140,7 @@ class Cardiologist extends Visit {
         this._pastIllnesses = pastIllnesses;
         this._age = age;
     }
+
 }
 class Therapist extends Visit {
     constructor(purposeVisit, age, fullName, dateVisit, comment) {
@@ -123,20 +161,22 @@ document.getElementById("createVisit").addEventListener('click', function () {
     if(select.value ==='Дантист') {
         newVisit = new Dentist(purpose.value, lastDateVisit.value, userName.value,
             date.value, comment.value);
+        newVisit.createVisit();
         console.log(newVisit);
     }
     if(select.value ==='Терапевт') {
         newVisit = new Therapist(purpose.value, age.value, userName.value,
             date.value, comment.value);
-        console.log(newVisit);
+        newVisit.createVisit();
     }
     if(select.value ==='Кардиолог') {
         newVisit = new Cardiologist(purpose.value, pressure.value, indexWeight.value,
             illness.value, age.value, userName.value, date.value, comment.value);
+        newVisit.createVisit();
         console.log(newVisit);
     }
     modalVisit.close();
-    modalVisit.createVisit();
+
 });
 
 

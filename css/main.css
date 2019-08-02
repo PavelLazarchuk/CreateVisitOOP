@@ -69,6 +69,7 @@
     border-radius: 2px;
     background-color: rgb(202, 153, 189);
     margin-right: 50px;
+    position: relative;
 }
 .modal-modal {
     /*display: block;*/
@@ -142,4 +143,26 @@
 }
 .input {
     width: 90%;
+}
+.visit-visible {
+    display: none;
+}
+.visit-cardio-visible {
+    display: none;
+}
+.visit-dantist-visible {
+    display: none;
+}
+.visit-age-visible {
+    display: none;
+}
+.close-card{
+    color: darkslategrey;
+    border-radius: 50px;
+    border: 1px solid darkslategrey;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 2px 6px;
+    cursor: pointer;
 }
