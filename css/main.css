@@ -72,7 +72,6 @@
     position: relative;
 }
 .modal-modal {
-    /*display: block;*/
     z-index: 9999999;
     position: fixed;
     top: 50%;
@@ -83,12 +82,10 @@
     background-color: white;
     border-radius: 5px;
     border: 3px solid rgb(32, 175, 194);
-    /*padding: 8px;*/
     box-sizing: border-box;
     display: none;
     flex-direction: column;
     padding: 20px;
-    /*position: relative;*/
 }
 .modal-overlay {
     display: block;
@@ -156,6 +153,7 @@
 .visit-age-visible {
     display: none;
 }
+
 .close-card{
     color: darkslategrey;
     border-radius: 50px;

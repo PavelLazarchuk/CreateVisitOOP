@@ -19,16 +19,12 @@ class Visit {
     open() {
         const overlay = document.getElementById('back');
         overlay.classList.add('modal-overlay');
-        const mainText = document.getElementById('main-text');
-        mainText.style.display = 'none';
         const modal = document.getElementById('modal');
         modal.style.display = 'flex';
     }
     close() {
         const overlay = document.getElementById('back');
         overlay.classList.remove('modal-overlay');
-        const mainText = document.getElementById('main-text');
-        mainText.style.display = 'block';
         const modal = document.getElementById('modal');
         modal.style.display = "none";
         const inputs = document.getElementsByClassName('input');
@@ -84,46 +80,59 @@ class Visit {
 <p class="visit-age-visible">Возраст: ${age.value}</p>
 <p class="visit-dantist-visible">Дата последнего визита: ${lastDateVisit.value}</p>
 <p class="visit-visible">Комментарий: ${comment.value}</p>
-<button id="closeCard" class="close-card" onclick="modalVisit.closeOneCard()">x</button>
-<button id='showMore' onclick="modalVisit.visibleMove()">Показать больше...</button>`;
+<button id="closeCard" class="close-card">x</button>
+<button class='showMore'>Показать больше...</button>`;
         divCard.classList.add("main-card");
         document.getElementById("mainCardId").appendChild(divCard);
+        showText('mainCardId');
     }
-    visibleMove (){
-        const showMore = document.getElementById('showMore');
-        const showCardіo = document.getElementsByClassName('visit-cardio-visible');
-        const showAge = document.getElementsByClassName('visit-age-visible');
-        showMore.style.display = "none";
-        const elemCard = document.getElementsByClassName('visit-visible');
-        for (let i = 0; i < elemCard.length; i+1) {
-            console.log(elemCard[i]);
-            elemCard[i].classList.remove('visit-visible');
-        }
-        if(document.getElementById('doctor').textContent === 'Кардиолог' ) {
-            for (let j = 0; j < showCardіo.length; j+1) {
-                console.log(showCardіo[j]);
-                showCardіo[j].classList.remove('visit-cardio-visible');
-            }
 
-            showAge.classList.remove('visit-age-visible');
-        }
-        if(document.getElementById('doctor').textContent === 'Терапевт' ) {
-            showAge.classList.remove('visit-age-visible');
-        }
-        if(document.getElementById('doctor').textContent === 'Дантист' ) {
-            showAge.classList.remove('visit-dantist-visible');
-        }
-
-    }
-    closeOneCard() {
-
-    }
 }
+function visibleMove (btn){
+    const parentEl = btn.parentElement;
+    const showAge = parentEl.getElementsByClassName('visit-age-visible');
+    btn.style.display = "none";
+    const elemCard = parentEl.getElementsByClassName('visit-visible');
+
+    for (let i = 0; i < elemCard.length; i+1) {
+        elemCard[i].classList.remove('visit-visible');
+    }
+    if(document.getElementById('doctor').textContent === 'Кардиолог' ) {
+        const showCardіo = parentEl.getElementsByClassName('visit-cardio-visible');
+
+        for (let j = 0; j < showCardіo.length; j+1) {
+            console.log(showCardіo[j]);
+            showCardіo[j].classList.remove('visit-cardio-visible');
+        }
+
+        showAge.classList.remove('visit-age-visible');
+    }
+    if(document.getElementById('doctor').textContent === 'Терапевт' ) {
+        showAge.classList.remove('visit-age-visible');
+    }
+    if(document.getElementById('doctor').textContent === 'Дантист' ) {
+        const showDantist =parentEl.getElementsByClassName('visit-dantist-visible');
+        showDantist.classList.remove('visit-dantist-visible');
+    }
+
+}
+
 Visit.hiddenInput();
 const modalVisit = new Visit();
 
 const button = document.getElementById("createModal");
 document.addEventListener('click', function(event) {
+
+    if(event.target.classList.contains('close-card')) {
+        event.target.offsetParent.remove();
+        showText('mainCardId');
+    }
+
+    if(event.target.classList.contains('showMore')) {
+        visibleMove(event.target);
+
+    }
+
     const modal = document.getElementById('modal');
     if (!modal.contains(event.target) && !button.contains(event.target)) {
         modalVisit.close();
@@ -155,28 +164,57 @@ class Dentist extends Visit {
     }
 }
 
-
 let newVisit;
 document.getElementById("createVisit").addEventListener('click', function () {
+
     if(select.value ==='Дантист') {
-        newVisit = new Dentist(purpose.value, lastDateVisit.value, userName.value,
-            date.value, comment.value);
-        newVisit.createVisit();
-        console.log(newVisit);
+        if (purpose.value !== "" && lastDateVisit.value !== "" && userName.value !== "" &&
+            date.value !== "") {
+            newVisit = new Dentist(purpose.value, lastDateVisit.value, userName.value,
+                date.value, comment.value);
+            newVisit.createVisit();
+        } else {
+            alert('Попребуйте еще раз! Для записи к врачу нужно заполнить все поля!')
+        }
     }
     if(select.value ==='Терапевт') {
-        newVisit = new Therapist(purpose.value, age.value, userName.value,
-            date.value, comment.value);
-        newVisit.createVisit();
+        if (purpose.value !== "" && age.value !== "" && userName.value !== "" && date.value !== "") {
+            newVisit = new Therapist(purpose.value, age.value, userName.value,
+                date.value, comment.value);
+            newVisit.createVisit();
+        } else {
+            alert('Попребуйте еще раз! Для записи к врачу нужно заполнить все поля!')
+        }
     }
     if(select.value ==='Кардиолог') {
-        newVisit = new Cardiologist(purpose.value, pressure.value, indexWeight.value,
-            illness.value, age.value, userName.value, date.value, comment.value);
-        newVisit.createVisit();
-        console.log(newVisit);
+        if (purpose.value !== "" && pressure.value !== "" && indexWeight.value !== "" && illness.value !== "" && age.value !== "" && userName.value !== "" && date.value !== "") {
+            newVisit = new Cardiologist(purpose.value, pressure.value, indexWeight.value,
+                illness.value, age.value, userName.value, date.value, comment.value);
+            newVisit.createVisit();
+        } else {
+            alert('Попребуйте еще раз! Для записи к врачу нужно заполнить все поля!')
+        }
+
     }
     modalVisit.close();
 
 });
+function showText(id) {
+    const elemCont = document.getElementById(id);
+
+    console.log(elemCont.hasChildNodes());
+    if ((elemCont.hasChildNodes())){
+        const mainText = document.getElementById('main-text');
+        mainText.style.display = "none";
+    } else {
+        const mainText = document.getElementById('main-text');
+        mainText.style.display = "block";
+    }
+}
+
+showText('mainCardId');
+
+
+
 
 
