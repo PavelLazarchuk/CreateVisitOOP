@@ -87,6 +87,10 @@ class Visit {
         document.getElementById("mainCardId").appendChild(divCard);
         showText('mainCardId');
         addCartItem(divCard);
+        const visitVisible = document.getElementsByClassName("visit-visible");
+        if(comment.value === "") {
+            visitVisible[visitVisible.length - 1].style.display = "none";
+        }
     }
 }
 
