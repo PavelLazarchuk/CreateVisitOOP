@@ -85,6 +85,7 @@ class Visit {
         divCard.classList.add("main-card");
         document.getElementById("mainCardId").appendChild(divCard);
         showText('mainCardId');
+        addCartItem(divCard);
     }
 
 }
@@ -199,10 +200,16 @@ document.getElementById("createVisit").addEventListener('click', function () {
     modalVisit.close();
 
 });
+function addCartItem(itemId) {
+    let count = parseInt(localStorage.getItem('cart-size')) || 0;
+    localStorage.setItem('cart-item-' + (count + 1), itemId);
+    localStorage.setItem('cart-size', count + 1);
+}
+
+
 function showText(id) {
     const elemCont = document.getElementById(id);
 
-    console.log(elemCont.hasChildNodes());
     if ((elemCont.hasChildNodes())){
         const mainText = document.getElementById('main-text');
         mainText.style.display = "none";
