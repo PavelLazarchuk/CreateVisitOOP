@@ -71,18 +71,19 @@ class Visit {
     createVisit(){
         let divCard = document.createElement("div");
         divCard.innerHTML = `<p>${userName.value}</p>
-<p id="doctor">${select.value}</p>
-<p class="visit-visible">Цель визита: ${purpose.value}</p>
-<p class="visit-visible">Дата визита: ${date.value}</p>
-<p class="visit-cardio-visible">Давление: ${pressure.value}</p>
-<p class="visit-cardio-visible">Индекс маси тела: ${indexWeight.value}</p>
-<p class="visit-cardio-visible">Заболевания: ${illness.value}</p>
-<p class="visit-age-visible">Возраст: ${age.value}</p>
-<p class="visit-dantist-visible">Дата последнего визита: ${lastDateVisit.value}</p>
-<p class="visit-visible">Комментарий: ${comment.value}</p>
-<button id="closeCard" class="close-card">x</button>
-<button class='showMore'>Показать больше...</button>`;
+        <p id="doctor">${select.value}</p>
+        <p class="visit-visible">Цель визита: ${purpose.value}</p>
+        <p class="visit-visible">Дата визита: ${date.value}</p>
+        <p class="visit-cardio-visible">Давление: ${pressure.value}</p>
+        <p class="visit-cardio-visible">Индекс маси тела: ${indexWeight.value}</p>
+        <p class="visit-cardio-visible">Заболевания: ${illness.value}</p>
+        <p class="visit-age-visible">Возраст: ${age.value}</p>
+        <p class="visit-dantist-visible">Дата последнего визита: ${lastDateVisit.value}</p>
+        <p class="visit-visible">Комментарий: ${comment.value}</p>
+        <button id="closeCard" class="close-card">x</button>
+        <button class='showMore'>Показать больше...</button>`;
         divCard.classList.add("main-card");
+        divCard.setAttribute("number", localStorage.getItem("cart-size"));
         document.getElementById("mainCardId").appendChild(divCard);
         showText('mainCardId');
         addCartItem(divCard);
@@ -99,11 +100,10 @@ function visibleMove (btn){
         elemCard[i].classList.remove('visit-visible');
     }
     if(document.getElementById('doctor').textContent === 'Кардиолог' ) {
-        const showCardіo = parentEl.getElementsByClassName('visit-cardio-visible');
+        const showCardio = parentEl.getElementsByClassName('visit-cardio-visible');
 
-        for (let j = 0; j < showCardіo.length; j+1) {
-            console.log(showCardіo[j]);
-            showCardіo[j].classList.remove('visit-cardio-visible');
+        for (let j = 0; j < showCardio.length; j+1) {
+            showCardio[j].classList.remove('visit-cardio-visible');
         }
 
         showAge.classList.remove('visit-age-visible');
@@ -115,7 +115,6 @@ function visibleMove (btn){
         const showDantist =parentEl.getElementsByClassName('visit-dantist-visible');
         showDantist.classList.remove('visit-dantist-visible');
     }
-
 }
 
 Visit.hiddenInput();
@@ -125,13 +124,16 @@ const button = document.getElementById("createModal");
 document.addEventListener('click', function(event) {
 
     if(event.target.classList.contains('close-card')) {
-        event.target.offsetParent.remove();
+        const divCard = event.target.parentNode;
+        const dataNumber = +divCard.getAttribute("number");
+        console.log(dataNumber);
+        localStorage.removeItem(`cart-item-${dataNumber+1 || 1}`);
+        divCard.remove();
         showText('mainCardId');
     }
 
     if(event.target.classList.contains('showMore')) {
         visibleMove(event.target);
-
     }
 
     const modal = document.getElementById('modal');
@@ -198,14 +200,13 @@ document.getElementById("createVisit").addEventListener('click', function () {
 
     }
     modalVisit.close();
-
 });
+
 function addCartItem(itemId) {
     let count = parseInt(localStorage.getItem('cart-size')) || 0;
     localStorage.setItem('cart-item-' + (count + 1), itemId);
     localStorage.setItem('cart-size', count + 1);
 }
-
 
 function showText(id) {
     const elemCont = document.getElementById(id);
@@ -220,8 +221,3 @@ function showText(id) {
 }
 
 showText('mainCardId');
-
-
-
-
-

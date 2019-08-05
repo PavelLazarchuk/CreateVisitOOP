@@ -68,7 +68,7 @@
     border: 1px solid #3d3c3c;
     border-radius: 2px;
     background-color: rgb(202, 153, 189);
-    margin-right: 50px;
+    margin: 10px 20px;
     position: relative;
 }
 .modal-modal {
