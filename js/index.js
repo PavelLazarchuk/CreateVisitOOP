@@ -126,7 +126,6 @@ document.addEventListener('click', function(event) {
     if(event.target.classList.contains('close-card')) {
         const divCard = event.target.parentNode;
         const dataNumber = +divCard.getAttribute("number");
-        console.log(dataNumber);
         localStorage.removeItem(`cart-item-${dataNumber+1 || 1}`);
         divCard.remove();
         showText('mainCardId');
