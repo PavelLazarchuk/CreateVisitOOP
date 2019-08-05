@@ -90,30 +90,34 @@ class Visit {
     }
 
 }
+
 function visibleMove (btn){
     const parentEl = btn.parentElement;
     const showAge = parentEl.getElementsByClassName('visit-age-visible');
     btn.style.display = "none";
     const elemCard = parentEl.getElementsByClassName('visit-visible');
-
     for (let i = 0; i < elemCard.length; i+1) {
         elemCard[i].classList.remove('visit-visible');
     }
-    if(document.getElementById('doctor').textContent === 'Кардиолог' ) {
+    if(parentEl.getElementsByClassName('doctor')[0].textContent === 'Кардиолог' ) {
         const showCardio = parentEl.getElementsByClassName('visit-cardio-visible');
-
         for (let j = 0; j < showCardio.length; j+1) {
             showCardio[j].classList.remove('visit-cardio-visible');
         }
-
-        showAge.classList.remove('visit-age-visible');
+        for (let j = 0; j < showAge.length; j+1) {
+            showAge[j].classList.remove('visit-age-visible');
+        }
     }
-    if(document.getElementById('doctor').textContent === 'Терапевт' ) {
-        showAge.classList.remove('visit-age-visible');
+    else if(parentEl.getElementsByClassName('doctor')[0].textContent === 'Терапевт' ) {
+        for (let j = 0; j < showAge.length; j+1) {
+            showAge[j].classList.remove('visit-age-visible');
+        }
     }
-    if(document.getElementById('doctor').textContent === 'Дантист' ) {
+    else if(parentEl.getElementsByClassName('doctor')[0].textContent === 'Дантист' ) {
         const showDantist =parentEl.getElementsByClassName('visit-dantist-visible');
-        showDantist.classList.remove('visit-dantist-visible');
+        for (let j = 0; j < showDantist.length; j+1) {
+            showDantist[j].classList.remove('visit-dantist-visible');
+        }
     }
 }
 
