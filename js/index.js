@@ -71,7 +71,7 @@ class Visit {
     createVisit(){
         let divCard = document.createElement("div");
         divCard.innerHTML = `<p>${userName.value}</p>
-        <p id="doctor">${select.value}</p>
+        <p class="doctor">${select.value}</p>
         <p class="visit-visible">Цель визита: ${purpose.value}</p>
         <p class="visit-visible">Дата визита: ${date.value}</p>
         <p class="visit-cardio-visible">Давление: ${pressure.value}</p>
@@ -88,7 +88,6 @@ class Visit {
         showText('mainCardId');
         addCartItem(divCard);
     }
-
 }
 
 function visibleMove (btn){
