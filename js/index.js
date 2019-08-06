@@ -10,9 +10,6 @@ const lastDateVisit = document.getElementById('lastDateVisit');
 const sel = document.getElementById('select');
 let arrCard = JSON.parse(localStorage.getItem('item')) ? JSON.parse(localStorage.getItem('item')) : [];
 
-
-
-
 for(let i = 0; i < arrCard.length; i++) {
     createCard(arrCard[i].userName, arrCard[i].select, arrCard[i].purpose, arrCard[i].date, arrCard[i].pressure, arrCard[i].indexWeight, arrCard[i].illness, arrCard[i].age, arrCard[i].lastDateVisit, arrCard[i].comment, arrCard.length);
 }
@@ -77,11 +74,10 @@ class Visit {
         }
     }
     createVisit(){
-        // const createdCars = JSON.parse(localStorage.getItem('item'))
         addCartItem({
             id:  arrCard.length,
             userName: userName.value,
-            select: select.value,
+            select: sel.value,
             purpose: purpose.value,
             date: date.value,
             pressure: pressure.value,
@@ -91,7 +87,6 @@ class Visit {
             lastDateVisit: lastDateVisit.value,
             comment: comment.value
         });
-
     }
 }
 
@@ -131,21 +126,20 @@ const modalVisit = new Visit();
 function createCard(userName, select, purpose, date, pressure, indexWeight, illness, age, lastDateVisit, comment, id) {
     let divCard = document.createElement("div");
     divCard.id= id-1;
-    divCard.innerHTML = `<p>${userName}</p>
-        <p class="doctor">${select}</p>
-        <p class="visit-visible">Цель визита: ${purpose}</p>
-        <p class="visit-visible">Дата визита: ${date}</p>
-        <p class="visit-cardio-visible">Давление: ${pressure}</p>
-        <p class="visit-cardio-visible">Индекс маси тела: ${indexWeight}</p>
-        <p class="visit-cardio-visible">Заболевания: ${illness}</p>
-        <p class="visit-age-visible">Возраст: ${age}</p>
-        <p class="visit-dantist-visible">Дата последнего визита: ${lastDateVisit}</p>
-        <p class="visit-visible">Комментарий: ${comment}</p>
+    divCard.innerHTML = `<p class="paragraph">${userName}</p>
+        <p class="doctor paragraph">${select}</p>
+        <p class="visit-visible paragraph">Цель визита: ${purpose}</p>
+        <p class="visit-visible paragraph">Дата визита: ${date}</p>
+        <p class="visit-cardio-visible paragraph">Давление: ${pressure}</p>
+        <p class="visit-cardio-visible paragraph">Индекс маси тела: ${indexWeight}</p>
+        <p class="visit-cardio-visible paragraph">Заболевания: ${illness}</p>
+        <p class="visit-age-visible paragraph">Возраст: ${age}</p>
+        <p class="visit-dantist-visible paragraph">Дата последнего визита: ${lastDateVisit}</p>
+        <p class="visit-visible paragraph">Комментарий: ${comment}</p>
         <button id="closeCard" class="close-card">x</button>
         <button class='showMore'>Показать больше...</button>`;
     divCard.classList.add("main-card");
     document.getElementById("mainCardId").appendChild(divCard);
-    console.log(divCard);
     showText('mainCardId');
     const visitVisible = document.getElementsByClassName("visit-visible");
     if(comment === "") {
@@ -236,7 +230,6 @@ document.getElementById("createVisit").addEventListener('click', function () {
         } else {
             alert('Попребуйте еще раз! Для записи к врачу нужно заполнить все поля!')
         }
-
     }
     modalVisit.close();
 });
@@ -247,14 +240,6 @@ function addCartItem(itemId) {
     createCard(itemId.userName, itemId.select, itemId.purpose, itemId.date, itemId.pressure, itemId.indexWeight, itemId.illness, itemId.age, itemId.lastDateVisit, itemId.comment, arrCard.length)
 }
 
-
-window.onunload = function (event) { //при закритии страницы данные сохраняются
-    // console.log(localStorage);
-    // for (let i = 0; i < localStorage.length; i) {
-    //
-    // }
-    // window.localStorage.getItem('themeStyle');
-};
 function showText(id) {
     const elemCont = document.getElementById(id);
 
@@ -268,3 +253,47 @@ function showText(id) {
 }
 
 showText('mainCardId');
+
+// Drag'n'Drop
+let dropContainer = document.getElementById("mainCardId");
+
+dropContainer.onmousedown = function(e) {
+    let dropCard;
+    if(e.target.querySelectorAll(".paragraph") && !e.target.classList.contains("showMore")) {
+        dropCard = e.target.parentNode;
+    }
+    if(e.target.classList.contains("main-card")) {
+        dropCard = e.target;
+    }
+    let coords = getCoords(dropCard);
+    let shiftX = e.pageX - coords.left;
+    let shiftY = e.pageY - coords.top;
+    dropCard.style.position = 'absolute';
+    moveAt(e);
+    dropCard.style.zIndex = "999"; // над другими элементами
+
+    function moveAt(e) {
+        dropCard.style.left = (e.pageX - shiftX) - 20 + 'px';
+        dropCard.style.top = (e.pageY - shiftY) - 10 + 'px';
+    }
+
+    document.onmousemove = function(e) {
+        moveAt(e);
+    };
+
+    dropCard.onmouseup = function() {
+        document.onmousemove = null;
+        dropCard.onmouseup = null;
+    };
+    dropCard.ondragstart = function() {
+        return false;
+    };
+};
+
+function getCoords(elem) {   // кроме IE8-
+    let box = elem.getBoundingClientRect();
+    return {
+        top: box.top + pageYOffset,
+        left: box.left + pageXOffset
+    };
+}
