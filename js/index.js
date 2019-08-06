@@ -8,6 +8,14 @@ const illness = document.getElementById('illness');
 const age = document.getElementById('age');
 const lastDateVisit = document.getElementById('lastDateVisit');
 const sel = document.getElementById('select');
+let arrCard = JSON.parse(localStorage.getItem('item')) ? JSON.parse(localStorage.getItem('item')) : [];
+
+
+
+
+for(let i = 0; i < arrCard.length; i++) {
+    createCard(arrCard[i].userName, arrCard[i].select, arrCard[i].purpose, arrCard[i].date, arrCard[i].pressure, arrCard[i].indexWeight, arrCard[i].illness, arrCard[i].age, arrCard[i].lastDateVisit, arrCard[i].comment, arrCard.length);
+}
 
 class Visit {
     constructor(purposeVisit, fullName, dateVisit, comment) {
@@ -69,28 +77,21 @@ class Visit {
         }
     }
     createVisit(){
-        let divCard = document.createElement("div");
-        divCard.innerHTML = `<p>${userName.value}</p>
-        <p class="doctor">${select.value}</p>
-        <p class="visit-visible">Цель визита: ${purpose.value}</p>
-        <p class="visit-visible">Дата визита: ${date.value}</p>
-        <p class="visit-cardio-visible">Давление: ${pressure.value}</p>
-        <p class="visit-cardio-visible">Индекс маси тела: ${indexWeight.value}</p>
-        <p class="visit-cardio-visible">Заболевания: ${illness.value}</p>
-        <p class="visit-age-visible">Возраст: ${age.value}</p>
-        <p class="visit-dantist-visible">Дата последнего визита: ${lastDateVisit.value}</p>
-        <p class="visit-visible">Комментарий: ${comment.value}</p>
-        <button id="closeCard" class="close-card">x</button>
-        <button class='showMore'>Показать больше...</button>`;
-        divCard.classList.add("main-card");
-        divCard.setAttribute("number", localStorage.getItem("cart-size"));
-        document.getElementById("mainCardId").appendChild(divCard);
-        showText('mainCardId');
-        addCartItem(divCard);
-        const visitVisible = document.getElementsByClassName("visit-visible");
-        if(comment.value === "") {
-            visitVisible[visitVisible.length - 1].style.display = "none";
-        }
+        // const createdCars = JSON.parse(localStorage.getItem('item'))
+        addCartItem({
+            id:  arrCard.length,
+            userName: userName.value,
+            select: select.value,
+            purpose: purpose.value,
+            date: date.value,
+            pressure: pressure.value,
+            indexWeight: indexWeight.value,
+            illness: illness.value,
+            age: age.value,
+            lastDateVisit: lastDateVisit.value,
+            comment: comment.value
+        });
+
     }
 }
 
@@ -127,13 +128,45 @@ function visibleMove (btn){
 Visit.hiddenInput();
 const modalVisit = new Visit();
 
+function createCard(userName, select, purpose, date, pressure, indexWeight, illness, age, lastDateVisit, comment, id) {
+    let divCard = document.createElement("div");
+    divCard.id= id-1;
+    divCard.innerHTML = `<p>${userName}</p>
+        <p class="doctor">${select}</p>
+        <p class="visit-visible">Цель визита: ${purpose}</p>
+        <p class="visit-visible">Дата визита: ${date}</p>
+        <p class="visit-cardio-visible">Давление: ${pressure}</p>
+        <p class="visit-cardio-visible">Индекс маси тела: ${indexWeight}</p>
+        <p class="visit-cardio-visible">Заболевания: ${illness}</p>
+        <p class="visit-age-visible">Возраст: ${age}</p>
+        <p class="visit-dantist-visible">Дата последнего визита: ${lastDateVisit}</p>
+        <p class="visit-visible">Комментарий: ${comment}</p>
+        <button id="closeCard" class="close-card">x</button>
+        <button class='showMore'>Показать больше...</button>`;
+    divCard.classList.add("main-card");
+    document.getElementById("mainCardId").appendChild(divCard);
+    console.log(divCard);
+    showText('mainCardId');
+    const visitVisible = document.getElementsByClassName("visit-visible");
+    if(comment === "") {
+        visitVisible[visitVisible.length - 1].style.display = "none";
+    }
+}
 const button = document.getElementById("createModal");
 document.addEventListener('click', function(event) {
 
     if(event.target.classList.contains('close-card')) {
         const divCard = event.target.parentNode;
-        const dataNumber = +divCard.getAttribute("number");
-        localStorage.removeItem(`cart-item-${dataNumber+1 || 1}`);
+       let cardsArr = JSON.parse(localStorage.getItem('item'));
+      let index = cardsArr.findIndex(el => el.id === divCard.attributes.id.value)-1;
+      cardsArr.splice(index, 1);
+     cardsArr.map(el => (el.id-1 < 0) ? 0 : el.id--)
+
+        let mainCardBlock = Array.from(document.getElementById('mainCardId').children);
+      mainCardBlock.forEach(el =>{
+          el.setAttribute('id',  el.attributes.id.value-1 < 0 ? 0 : el.attributes.id.value-1)
+                 })
+      localStorage.setItem('item', JSON.stringify(cardsArr))
         divCard.remove();
         showText('mainCardId');
     }
@@ -209,11 +242,19 @@ document.getElementById("createVisit").addEventListener('click', function () {
 });
 
 function addCartItem(itemId) {
-    let count = parseInt(localStorage.getItem('cart-size')) || 0;
-    localStorage.setItem('cart-item-' + (count + 1), itemId);
-    localStorage.setItem('cart-size', count + 1);
+     arrCard.push(itemId);
+    localStorage.setItem('item', JSON.stringify(arrCard));
+    createCard(itemId.userName, itemId.select, itemId.purpose, itemId.date, itemId.pressure, itemId.indexWeight, itemId.illness, itemId.age, itemId.lastDateVisit, itemId.comment, arrCard.length)
 }
 
+
+window.onunload = function (event) { //при закритии страницы данные сохраняются
+    // console.log(localStorage);
+    // for (let i = 0; i < localStorage.length; i) {
+    //
+    // }
+    // window.localStorage.getItem('themeStyle');
+};
 function showText(id) {
     const elemCont = document.getElementById(id);
 
