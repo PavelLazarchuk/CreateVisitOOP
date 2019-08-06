@@ -160,13 +160,13 @@ document.addEventListener('click', function(event) {
        let cardsArr = JSON.parse(localStorage.getItem('item'));
       let index = cardsArr.findIndex(el => el.id === divCard.attributes.id.value)-1;
       cardsArr.splice(index, 1);
-     cardsArr.map(el => (el.id-1 < 0) ? 0 : el.id--)
+     cardsArr.map(el => (el.id-1 < 0) ? 0 : el.id--);
 
         let mainCardBlock = Array.from(document.getElementById('mainCardId').children);
       mainCardBlock.forEach(el =>{
           el.setAttribute('id',  el.attributes.id.value-1 < 0 ? 0 : el.attributes.id.value-1)
-                 })
-      localStorage.setItem('item', JSON.stringify(cardsArr))
+                 });
+      localStorage.setItem('item', JSON.stringify(cardsArr));
         divCard.remove();
         showText('mainCardId');
     }
