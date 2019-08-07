@@ -165,6 +165,7 @@ document.addEventListener('click', function(event) {
 
     if(event.target.classList.contains('showMore')) {
         visibleMove(event.target);
+        event.target.classList.add('size');
     }
 
     const modal = document.getElementById('modal');
