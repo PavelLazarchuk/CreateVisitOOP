@@ -164,8 +164,10 @@ document.addEventListener('click', function(event) {
     }
 
     if(event.target.classList.contains('showMore')) {
+        const divCard = event.target.parentNode;
+        divCard.classList.add('size');
         visibleMove(event.target);
-        event.target.classList.add('size');
+
     }
 
     const modal = document.getElementById('modal');
