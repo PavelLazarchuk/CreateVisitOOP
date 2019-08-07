@@ -11,7 +11,7 @@ const sel = document.getElementById('select');
 let arrCard = JSON.parse(localStorage.getItem('item')) ? JSON.parse(localStorage.getItem('item')) : [];
 
 for(let i = 0; i < arrCard.length; i++) {
-    createCard(arrCard[i].userName, arrCard[i].select, arrCard[i].purpose, arrCard[i].date, arrCard[i].pressure, arrCard[i].indexWeight, arrCard[i].illness, arrCard[i].age, arrCard[i].lastDateVisit, arrCard[i].comment, arrCard.length);
+    createCard(arrCard[i].userName, arrCard[i].select, arrCard[i].purpose, arrCard[i].date, arrCard[i].pressure, arrCard[i].indexWeight, arrCard[i].illness, arrCard[i].age, arrCard[i].lastDateVisit, arrCard[i].comment);
 }
 
 class Visit {
@@ -75,7 +75,7 @@ class Visit {
     }
     createVisit(){
         addCartItem({
-            id:  arrCard.length,
+            id: Date.now(),
             userName: userName.value,
             select: sel.value,
             purpose: purpose.value,
@@ -125,7 +125,7 @@ const modalVisit = new Visit();
 
 function createCard(userName, select, purpose, date, pressure, indexWeight, illness, age, lastDateVisit, comment, id) {
     let divCard = document.createElement("div");
-    divCard.id= id-1;
+    // divCard.id= Date.now();
     divCard.innerHTML = `<p class="paragraph">${userName}</p>
         <p class="doctor paragraph">${select}</p>
         <p class="visit-visible paragraph">Цель визита: ${purpose}</p>
@@ -136,7 +136,7 @@ function createCard(userName, select, purpose, date, pressure, indexWeight, illn
         <p class="visit-age-visible paragraph">Возраст: ${age}</p>
         <p class="visit-dantist-visible paragraph">Дата последнего визита: ${lastDateVisit}</p>
         <p class="visit-visible paragraph">Комментарий: ${comment}</p>
-        <button id="closeCard" class="close-card">x</button>
+        <button id=${id} class="close-card">x</button>
         <button class='showMore'>Показать больше...</button>`;
     divCard.classList.add("main-card");
     document.getElementById("mainCardId").appendChild(divCard);
@@ -151,16 +151,14 @@ document.addEventListener('click', function(event) {
 
     if(event.target.classList.contains('close-card')) {
         const divCard = event.target.parentNode;
-       let cardsArr = JSON.parse(localStorage.getItem('item'));
-      let index = cardsArr.findIndex(el => el.id === divCard.attributes.id.value)-1;
-      cardsArr.splice(index, 1);
-     cardsArr.map(el => (el.id-1 < 0) ? 0 : el.id--);
+        let cardsArr = JSON.parse(localStorage.getItem('item'));
+        console.log(cardsArr);
+        let id = event.target.getAttribute('id');
+        let index = cardsArr.map(card => card.id.toString()).indexOf(id);
+        console.log(index);
+        cardsArr.splice(index, 1);
 
-        let mainCardBlock = Array.from(document.getElementById('mainCardId').children);
-      mainCardBlock.forEach(el =>{
-          el.setAttribute('id',  el.attributes.id.value-1 < 0 ? 0 : el.attributes.id.value-1)
-                 });
-      localStorage.setItem('item', JSON.stringify(cardsArr));
+        localStorage.setItem('item', JSON.stringify(cardsArr));
         divCard.remove();
         showText('mainCardId');
     }
@@ -237,7 +235,7 @@ document.getElementById("createVisit").addEventListener('click', function () {
 function addCartItem(itemId) {
      arrCard.push(itemId);
     localStorage.setItem('item', JSON.stringify(arrCard));
-    createCard(itemId.userName, itemId.select, itemId.purpose, itemId.date, itemId.pressure, itemId.indexWeight, itemId.illness, itemId.age, itemId.lastDateVisit, itemId.comment, arrCard.length)
+    createCard(itemId.userName, itemId.select, itemId.purpose, itemId.date, itemId.pressure, itemId.indexWeight, itemId.illness, itemId.age, itemId.lastDateVisit, itemId.comment, itemId.id)
 }
 
 function showText(id) {
