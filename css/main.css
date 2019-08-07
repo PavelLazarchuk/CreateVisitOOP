@@ -70,6 +70,7 @@
     background-color: rgb(202, 153, 189);
     margin: 10px 20px;
     position: relative;
+    max-height: 60px;
 }
 .modal-modal {
     z-index: 9999999;
@@ -170,5 +171,6 @@
     color: #332e2e;
 }
 .size {
-    height: 100%;
+    /*height: 100%;*/
+    max-height: 200px;
 }
