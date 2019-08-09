@@ -224,7 +224,8 @@ document.getElementById("createVisit").addEventListener('click', function () {
         }
     }
     if(select.value ==='Кардиолог') {
-        if (purpose.value !== "" && pressure.value !== "" && indexWeight.value !== "" && illness.value !== "" && age.value !== "" && userName.value !== "" && date.value !== "") {
+        if (purpose.value !== "" && pressure.value !== "" && indexWeight.value !== ""
+            && illness.value !== "" && age.value !== "" && userName.value !== "" && date.value !== "") {
             newVisit = new Cardiologist(purpose.value, pressure.value, indexWeight.value,
                 illness.value, age.value, userName.value, date.value, comment.value);
             newVisit.createVisit();
@@ -238,7 +239,8 @@ document.getElementById("createVisit").addEventListener('click', function () {
 function addCartItem(itemId) {
      arrCard.push(itemId);
     localStorage.setItem('item', JSON.stringify(arrCard));
-    createCard(itemId.userName, itemId.select, itemId.purpose, itemId.date, itemId.pressure, itemId.indexWeight, itemId.illness, itemId.age, itemId.lastDateVisit, itemId.comment, itemId.id)
+    createCard(itemId.userName, itemId.select, itemId.purpose, itemId.date, itemId.pressure, itemId.indexWeight,
+        itemId.illness, itemId.age, itemId.lastDateVisit, itemId.comment, itemId.id)
 }
 
 function showText(id) {
@@ -252,49 +254,54 @@ function showText(id) {
         mainText.style.display = "block";
     }
 }
-
 showText('mainCardId');
 
-// Drag'n'Drop
-let dropContainer = document.getElementById("mainCardId");
+let dropContainer = document.getElementById("mainCardId"); // Drag'n'Drop
+    dropContainer.onmousedown = function (e) {
+        let dropCard;
+        if (e.target.querySelectorAll(".paragraph") && !e.target.classList.contains("showMore")) {
+            dropCard = e.target.parentNode;
+        }
+        if (e.target.classList.contains("main-card")) {
+            dropCard = e.target;
+        }
+        let coords = getCoords(dropCard);
+        let dropMainContainer = document.getElementById("main");
+        let coordsContainer = getCoords(dropMainContainer);
+            let shiftX = e.pageX - coords.left;
+            let shiftY = e.pageY - coords.top;
+            let shiftYB = e.pageY - coords.bottom ;
+            let shiftXR = e.pageX - coords.right;
+            dropCard.style.position = 'absolute';
+            dropCard.style.zIndex = "999";
+            function moveAt(e) {
+                if(coordsContainer.top <= (e.pageY - shiftY) && coordsContainer.left <= (e.pageX - shiftX)
+                && coordsContainer.bottom > (e.pageY - shiftYB) && coordsContainer.right >= (e.pageX - shiftXR)) {
+                    dropCard.style.left = (e.pageX - shiftX) - 20 + 'px';
+                    dropCard.style.top = (e.pageY - shiftY) - 10 + 'px';
+                }
+            }
 
-dropContainer.onmousedown = function(e) {
-    let dropCard;
-    if(e.target.querySelectorAll(".paragraph") && !e.target.classList.contains("showMore")) {
-        dropCard = e.target.parentNode;
-    }
-    if(e.target.classList.contains("main-card")) {
-        dropCard = e.target;
-    }
-    let coords = getCoords(dropCard);
-    let shiftX = e.pageX - coords.left;
-    let shiftY = e.pageY - coords.top;
-    dropCard.style.position = 'absolute';
-    moveAt(e);
-    dropCard.style.zIndex = "999"; // над другими элементами
+            document.onmousemove = function (e) {
+                moveAt(e);
+            };
 
-    function moveAt(e) {
-        dropCard.style.left = (e.pageX - shiftX) - 20 + 'px';
-        dropCard.style.top = (e.pageY - shiftY) - 10 + 'px';
-    }
-
-    document.onmousemove = function(e) {
-        moveAt(e);
+            dropCard.onmouseup = function () {
+                document.onmousemove = null;
+                dropCard.onmouseup = null;
+            };
+            dropCard.ondragstart = function () {
+                return false;
+            };
     };
 
-    dropCard.onmouseup = function() {
-        document.onmousemove = null;
-        dropCard.onmouseup = null;
-    };
-    dropCard.ondragstart = function() {
-        return false;
-    };
-};
 
-function getCoords(elem) {   // кроме IE8-
+function getCoords(elem) {
     let box = elem.getBoundingClientRect();
     return {
         top: box.top + pageYOffset,
-        left: box.left + pageXOffset
-    };
+        left: box.left + pageXOffset,
+        bottom: box.top + box.height + pageYOffset,
+        right: box.left + box.width + pageXOffset
+    }
 }

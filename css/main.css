@@ -1,6 +1,4 @@
-
-
-.container { 
+.container {
     width: 80%;
     margin: 0 auto;
     padding: 10px;
@@ -171,6 +169,5 @@
     color: #332e2e;
 }
 .size {
-    /*height: 100%;*/
     max-height: 200px;
 }
