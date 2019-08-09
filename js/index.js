@@ -151,14 +151,14 @@ document.addEventListener('click', function(event) {
 
     if(event.target.classList.contains('close-card')) {
         const divCard = event.target.parentNode;
-        let cardsArr = JSON.parse(localStorage.getItem('item'));
-        console.log(cardsArr);
+        // let cardsArr = JSON.parse(localStorage.getItem('item'));
+        console.log(arrCard);
         let id = event.target.getAttribute('id');
-        let index = cardsArr.map(card => card.id.toString()).indexOf(id);
+        let index = arrCard.map(card => card.id.toString()).indexOf(id);
         console.log(index);
-        cardsArr.splice(index, 1);
+        arrCard.splice(index, 1);
 
-        localStorage.setItem('item', JSON.stringify(cardsArr));
+        localStorage.setItem('item', JSON.stringify(arrCard));
         divCard.remove();
         showText('mainCardId');
     }
