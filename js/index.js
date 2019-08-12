@@ -10,8 +10,6 @@ const lastDateVisit = document.getElementById('lastDateVisit');
 const sel = document.getElementById('select');
 let arrCard = JSON.parse(localStorage.getItem('item')) ? JSON.parse(localStorage.getItem('item')) : [];
 
-
-
 class Visit {
     constructor(purposeVisit, fullName, dateVisit, comment) {
         this._purposeVisit = purposeVisit;
@@ -173,7 +171,6 @@ document.addEventListener('click', function(event) {
         const divCard = event.target.parentNode;
         divCard.classList.add('size');
         visibleMove(event.target);
-
     }
 
     const modal = document.getElementById('modal');
@@ -209,8 +206,8 @@ let newVisit;
 document.getElementById("createVisit").addEventListener('click', function () {
 
     if(select.value ==='Дантист') {
-        if (purpose.value !== "" && lastDateVisit.value !== "" && userName.value !== "" &&
-            date.value !== "") {
+        if ( this._purposeVisit !== "" && this._lastDate !== "" && this._fullName !== "" &&
+            this._dateVisit !== "") {
             newVisit = new Dentist(purpose.value, lastDateVisit.value, userName.value,
                 date.value, comment.value);
             newVisit.createVisit();
@@ -219,7 +216,7 @@ document.getElementById("createVisit").addEventListener('click', function () {
         }
     }
     if(select.value ==='Терапевт') {
-        if (purpose.value !== "" && age.value !== "" && userName.value !== "" && date.value !== "") {
+        if (this._purposeVisit !== "" && this._age !== "" && this._fullName !== "" && this._dateVisit !== "") {
             newVisit = new Therapist(purpose.value, age.value, userName.value,
                 date.value, comment.value);
             newVisit.createVisit();
@@ -228,8 +225,8 @@ document.getElementById("createVisit").addEventListener('click', function () {
         }
     }
     if(select.value ==='Кардиолог') {
-        if (purpose.value !== "" && pressure.value !== "" && indexWeight.value !== ""
-            && illness.value !== "" && age.value !== "" && userName.value !== "" && date.value !== "") {
+        if (this._purposeVisit !== "" && this._normalPressure !== "" && this._massIndex !== ""
+            && this._pastIllnesses !== "" && this._age !== "" && this._fullName !== "" && this._dateVisit !== "") {
             newVisit = new Cardiologist(purpose.value, pressure.value, indexWeight.value,
                 illness.value, age.value, userName.value, date.value, comment.value);
             newVisit.createVisit();
@@ -239,13 +236,6 @@ document.getElementById("createVisit").addEventListener('click', function () {
     }
     modalVisit.close();
 });
-
-// function addCartItem(itemId) {
-//      arrCard.push(itemId);
-//     localStorage.setItem('item', JSON.stringify(arrCard));
-//     createCard(itemId.userName, itemId.select, itemId.purpose, itemId.date, itemId.pressure, itemId.indexWeight,
-//         itemId.illness, itemId.age, itemId.lastDateVisit, itemId.comment, itemId.id)
-// }
 
 function showText(id) {
     const elemCont = document.getElementById(id);
