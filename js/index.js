@@ -10,9 +10,7 @@ const lastDateVisit = document.getElementById('lastDateVisit');
 const sel = document.getElementById('select');
 let arrCard = JSON.parse(localStorage.getItem('item')) ? JSON.parse(localStorage.getItem('item')) : [];
 
-for(let i = 0; i < arrCard.length; i++) {
-    createCard(arrCard[i].userName, arrCard[i].select, arrCard[i].purpose, arrCard[i].date, arrCard[i].pressure, arrCard[i].indexWeight, arrCard[i].illness, arrCard[i].age, arrCard[i].lastDateVisit, arrCard[i].comment);
-}
+
 
 class Visit {
     constructor(purposeVisit, fullName, dateVisit, comment) {
@@ -73,21 +71,53 @@ class Visit {
             illness.style.display = 'none';
         }
     }
+    static createCard (userName, select, purpose, date, pressure, indexWeight, illness, age, lastDateVisit, comment, id) {
+        let divCard = document.createElement("div");
+        divCard.innerHTML = `<p class="paragraph">${userName}</p>
+        <p class="doctor paragraph">${select}</p>
+        <p class="visit-visible paragraph">Цель визита: ${purpose}</p>
+        <p class="visit-visible paragraph">Дата визита: ${date}</p>
+        <p class="visit-cardio-visible paragraph">Давление: ${pressure}</p>
+        <p class="visit-cardio-visible paragraph">Индекс маси тела: ${indexWeight}</p>
+        <p class="visit-cardio-visible paragraph">Заболевания: ${illness}</p>
+        <p class="visit-age-visible paragraph">Возраст: ${age}</p>
+        <p class="visit-dantist-visible paragraph">Дата последнего визита: ${lastDateVisit}</p>
+        <p class="visit-visible paragraph">Комментарий: ${comment}</p>
+        <button id=${id} class="close-card">x</button>
+        <button class='showMore'>Показать больше...</button>`;
+        divCard.classList.add("main-card");
+        document.getElementById("mainCardId").appendChild(divCard);
+        showText('mainCardId');
+        const visitVisible = document.getElementsByClassName("visit-visible");
+        if(comment === "") {
+            visitVisible[visitVisible.length - 1].style.display = "none";
+        }
+    }
+    addCartItem(item) {
+        arrCard.push(item);
+        localStorage.setItem('item', JSON.stringify(arrCard));
+        Visit.createCard(item.userName, item.select, item.purpose, item.date, item.pressure, item.indexWeight,
+            item.illness, item.age, item.lastDateVisit, item.comment, item.id)
+    }
     createVisit(){
-        addCartItem({
+        this.addCartItem({
             id: Date.now(),
-            userName: userName.value,
+            userName: this._fullName,
             select: sel.value,
-            purpose: purpose.value,
-            date: date.value,
+            purpose: this._purposeVisit,
+            date: this._dateVisit,
             pressure: pressure.value,
             indexWeight: indexWeight.value,
             illness: illness.value,
             age: age.value,
             lastDateVisit: lastDateVisit.value,
-            comment: comment.value
+            comment: this._comment
         });
     }
+}
+
+for(let i = 0; i < arrCard.length; i++) {
+    Visit.createCard(arrCard[i].userName, arrCard[i].select, arrCard[i].purpose, arrCard[i].date, arrCard[i].pressure, arrCard[i].indexWeight, arrCard[i].illness, arrCard[i].age, arrCard[i].lastDateVisit, arrCard[i].comment);
 }
 
 function visibleMove (btn){
@@ -123,39 +153,15 @@ function visibleMove (btn){
 Visit.hiddenInput();
 const modalVisit = new Visit();
 
-function createCard(userName, select, purpose, date, pressure, indexWeight, illness, age, lastDateVisit, comment, id) {
-    let divCard = document.createElement("div");
-    // divCard.id= Date.now();
-    divCard.innerHTML = `<p class="paragraph">${userName}</p>
-        <p class="doctor paragraph">${select}</p>
-        <p class="visit-visible paragraph">Цель визита: ${purpose}</p>
-        <p class="visit-visible paragraph">Дата визита: ${date}</p>
-        <p class="visit-cardio-visible paragraph">Давление: ${pressure}</p>
-        <p class="visit-cardio-visible paragraph">Индекс маси тела: ${indexWeight}</p>
-        <p class="visit-cardio-visible paragraph">Заболевания: ${illness}</p>
-        <p class="visit-age-visible paragraph">Возраст: ${age}</p>
-        <p class="visit-dantist-visible paragraph">Дата последнего визита: ${lastDateVisit}</p>
-        <p class="visit-visible paragraph">Комментарий: ${comment}</p>
-        <button id=${id} class="close-card">x</button>
-        <button class='showMore'>Показать больше...</button>`;
-    divCard.classList.add("main-card");
-    document.getElementById("mainCardId").appendChild(divCard);
-    showText('mainCardId');
-    const visitVisible = document.getElementsByClassName("visit-visible");
-    if(comment === "") {
-        visitVisible[visitVisible.length - 1].style.display = "none";
-    }
-}
 const button = document.getElementById("createModal");
+button.addEventListener("click", modalVisit.open.bind(modalVisit));
+
 document.addEventListener('click', function(event) {
 
     if(event.target.classList.contains('close-card')) {
         const divCard = event.target.parentNode;
-        // let cardsArr = JSON.parse(localStorage.getItem('item'));
-        console.log(arrCard);
         let id = event.target.getAttribute('id');
         let index = arrCard.map(card => card.id.toString()).indexOf(id);
-        console.log(index);
         arrCard.splice(index, 1);
 
         localStorage.setItem('item', JSON.stringify(arrCard));
@@ -175,8 +181,6 @@ document.addEventListener('click', function(event) {
         modalVisit.close();
     }
 });
-
-button.addEventListener("click", modalVisit.open.bind(modalVisit));
 
 class Cardiologist extends Visit {
     constructor(purposeVisit, normalPressure, massIndex, pastIllnesses, age,  fullName, dateVisit, comment) {
@@ -236,12 +240,12 @@ document.getElementById("createVisit").addEventListener('click', function () {
     modalVisit.close();
 });
 
-function addCartItem(itemId) {
-     arrCard.push(itemId);
-    localStorage.setItem('item', JSON.stringify(arrCard));
-    createCard(itemId.userName, itemId.select, itemId.purpose, itemId.date, itemId.pressure, itemId.indexWeight,
-        itemId.illness, itemId.age, itemId.lastDateVisit, itemId.comment, itemId.id)
-}
+// function addCartItem(itemId) {
+//      arrCard.push(itemId);
+//     localStorage.setItem('item', JSON.stringify(arrCard));
+//     createCard(itemId.userName, itemId.select, itemId.purpose, itemId.date, itemId.pressure, itemId.indexWeight,
+//         itemId.illness, itemId.age, itemId.lastDateVisit, itemId.comment, itemId.id)
+// }
 
 function showText(id) {
     const elemCont = document.getElementById(id);
