@@ -17,13 +17,13 @@ class Visit {
         this._dateVisit = dateVisit;
         this._comment = comment;
     }
-    open() {
+   static open() {
         const overlay = document.getElementById('back');
         overlay.classList.add('modal-overlay');
         const modal = document.getElementById('modal');
         modal.style.display = 'flex';
     }
-    close() {
+    static close() {
         const overlay = document.getElementById('back');
         overlay.classList.remove('modal-overlay');
         const modal = document.getElementById('modal');
@@ -46,7 +46,7 @@ class Visit {
         age.style.display = 'none';
         lastDateVisit.style.display = 'none';
     }
-     checkDoctor() {
+     static checkDoctor() {
         if(sel.options[sel.selectedIndex].text === 'Кардиолог' ) {
             pressure.style.display = 'block';
             indexWeight.style.display = 'block';
@@ -149,10 +149,9 @@ function visibleMove (btn){
 }
 
 Visit.hiddenInput();
-const modalVisit = new Visit();
 
 const button = document.getElementById("createModal");
-button.addEventListener("click", modalVisit.open.bind(modalVisit));
+button.addEventListener("click", Visit.open.bind(Visit));
 
 document.addEventListener('click', function(event) {
 
@@ -175,7 +174,7 @@ document.addEventListener('click', function(event) {
 
     const modal = document.getElementById('modal');
     if (!modal.contains(event.target) && !button.contains(event.target)) {
-        modalVisit.close();
+        Visit.close();
     }
 });
 
