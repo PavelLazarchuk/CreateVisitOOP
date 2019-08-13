@@ -27,14 +27,14 @@
                             <input type='text' id='userName' placeholder="Введите имя:"  class="modal-input-position input"   required>
                             <input type='text' id='date' placeholder="Введите дату визита в формате(дд.мм.гггг):"class="modal-input-position input"  required>
                             <p>
-                                <select class='select-style' id="select" onchange='modalVisit.checkDoctor()' size='1' name="doctor[]" required>
+                                <select class='select-style' id="select" onchange='Visit.checkDoctor()' size='1' name="doctor[]" required>
                                     <option disabled selected>Выберите врача</option>
                                     <option value="Кардиолог">Кардиолог</option>
                                     <option value="Терапевт">Терапевт</option>
                                     <option value="Дантист">Дантист</option>
                                 </select>
                             </p>
-                            <button id='closeModal' class='close-modal' onclick='modalVisit.close()'>X</button>
+                            <button id='closeModal' class='close-modal' onclick='Visit.close()'>X</button>
                             <input type="text" placeholder="Цель визита" class="modal-input-position input" id="purposeVisit" required>
                             <input type="text" id="pressure" placeholder="Введите ваше давление" class="modal-input-position input" required>
                             <input type="number" id="indexWeight" placeholder="Введите ваш индекс массы тела" class="modal-input-position input" required>
