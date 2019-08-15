@@ -29,9 +29,10 @@ class Visit {
         const modal = document.getElementById('modal');
         modal.style.display = "none";
         const inputs = document.getElementsByClassName('input');
-        for (let i = 0; i < inputs.length; i++) {
-            inputs[i].value = '';
-        }
+            for (let i = 0; i < inputs.length; i++) {
+                inputs[i].value = '';
+            }
+
         document.getElementById('select').options[0].selected = 'selected';
         lastDateVisit.style.display = 'none';
         age.style.display = 'none';
@@ -112,40 +113,75 @@ class Visit {
             comment: this._comment
         });
     }
+    static drag (e) {
+        let dropCard;
+        if (e.target.querySelectorAll(".paragraph") && !e.target.classList.contains("showMore")) {
+            dropCard = e.target.parentNode;
+        }
+        if (e.target.classList.contains("main-card")) {
+            dropCard = e.target;
+        }
+        let coords = getCoords(dropCard);
+        let dropMainContainer = document.getElementById("main");
+        let coordsContainer = getCoords(dropMainContainer);
+        let shiftX = e.pageX - coords.left;
+        let shiftY = e.pageY - coords.top;
+        let shiftYB = e.pageY - coords.bottom ;
+        let shiftXR = e.pageX - coords.right;
+        dropCard.style.position = 'absolute';
+        dropCard.style.zIndex = "999";
+        function moveAt(e) {
+            if(coordsContainer.top <= (e.pageY - shiftY) && coordsContainer.left <= (e.pageX - shiftX)
+                && coordsContainer.bottom > (e.pageY - shiftYB) && coordsContainer.right >= (e.pageX - shiftXR)) {
+                dropCard.style.left = (e.pageX - shiftX) - 20 + 'px';
+                dropCard.style.top = (e.pageY - shiftY) - 10 + 'px';
+            }
+        }
+
+        document.onmousemove = function (e) {
+            moveAt(e);
+        };
+
+        dropCard.onmouseup = function () {
+            document.onmousemove = null;
+            dropCard.onmouseup = null;
+        };
+        dropCard.ondragstart = function () {
+            return false;
+        };
+    }
+    static visibleMove (btn) {
+        const parentEl = btn.parentElement;
+        const showAge = parentEl.getElementsByClassName('visit-age-visible');
+        btn.style.display = "none";
+        const elemCard = parentEl.getElementsByClassName('visit-visible');
+        for (let i = 0; i < elemCard.length; i + 1) {
+            elemCard[i].classList.remove('visit-visible');
+        }
+        if (parentEl.getElementsByClassName('doctor')[0].textContent === 'Кардиолог') {
+            const showCardio = parentEl.getElementsByClassName('visit-cardio-visible');
+            for (let j = 0; j < showCardio.length; j + 1) {
+                showCardio[j].classList.remove('visit-cardio-visible');
+            }
+            for (let j = 0; j < showAge.length; j + 1) {
+                showAge[j].classList.remove('visit-age-visible');
+            }
+        } else if (parentEl.getElementsByClassName('doctor')[0].textContent === 'Терапевт') {
+            for (let j = 0; j < showAge.length; j + 1) {
+                showAge[j].classList.remove('visit-age-visible');
+            }
+        } else if (parentEl.getElementsByClassName('doctor')[0].textContent === 'Дантист') {
+            const showDantist = parentEl.getElementsByClassName('visit-dantist-visible');
+            for (let j = 0; j < showDantist.length; j + 1) {
+                showDantist[j].classList.remove('visit-dantist-visible');
+            }
+        }
+    }
+
 }
 
 for(let i = 0; i < arrCard.length; i++) {
     Visit.createCard(arrCard[i].userName, arrCard[i].select, arrCard[i].purpose, arrCard[i].date, arrCard[i].pressure, arrCard[i].indexWeight, arrCard[i].illness, arrCard[i].age, arrCard[i].lastDateVisit, arrCard[i].comment);
-}
-
-function visibleMove (btn){
-    const parentEl = btn.parentElement;
-    const showAge = parentEl.getElementsByClassName('visit-age-visible');
-    btn.style.display = "none";
-    const elemCard = parentEl.getElementsByClassName('visit-visible');
-    for (let i = 0; i < elemCard.length; i+1) {
-        elemCard[i].classList.remove('visit-visible');
-    }
-    if(parentEl.getElementsByClassName('doctor')[0].textContent === 'Кардиолог' ) {
-        const showCardio = parentEl.getElementsByClassName('visit-cardio-visible');
-        for (let j = 0; j < showCardio.length; j+1) {
-            showCardio[j].classList.remove('visit-cardio-visible');
-        }
-        for (let j = 0; j < showAge.length; j+1) {
-            showAge[j].classList.remove('visit-age-visible');
-        }
-    }
-    else if(parentEl.getElementsByClassName('doctor')[0].textContent === 'Терапевт' ) {
-        for (let j = 0; j < showAge.length; j+1) {
-            showAge[j].classList.remove('visit-age-visible');
-        }
-    }
-    else if(parentEl.getElementsByClassName('doctor')[0].textContent === 'Дантист' ) {
-        const showDantist =parentEl.getElementsByClassName('visit-dantist-visible');
-        for (let j = 0; j < showDantist.length; j+1) {
-            showDantist[j].classList.remove('visit-dantist-visible');
-        }
-    }
 }
 
 Visit.hiddenInput();
@@ -169,7 +205,7 @@ document.addEventListener('click', function(event) {
     if(event.target.classList.contains('showMore')) {
         const divCard = event.target.parentNode;
         divCard.classList.add('size');
-        visibleMove(event.target);
+        Visit.visibleMove(event.target);
     }
 
     const modal = document.getElementById('modal');
@@ -186,7 +222,6 @@ class Cardiologist extends Visit {
         this._pastIllnesses = pastIllnesses;
         this._age = age;
     }
-
 }
 class Therapist extends Visit {
     constructor(purposeVisit, age, fullName, dateVisit, comment) {
@@ -204,36 +239,24 @@ class Dentist extends Visit {
 let newVisit;
 document.getElementById("createVisit").addEventListener('click', function () {
 
-    if(select.value ==='Дантист') {
-        if ( this._purposeVisit !== "" && this._lastDate !== "" && this._fullName !== "" &&
-            this._dateVisit !== "") {
-            newVisit = new Dentist(purpose.value, lastDateVisit.value, userName.value,
-                date.value, comment.value);
-            newVisit.createVisit();
-        } else {
-            alert('Попребуйте еще раз! Для записи к врачу нужно заполнить все поля!')
-        }
+    if(sel.value ==='Дантист' && lastDateVisit.value !== "") {
+        newVisit = new Dentist(purpose.value, lastDateVisit.value, userName.value,
+            date.value, comment.value);
+        newVisit.createVisit();
+        Visit.close();
     }
-    if(select.value ==='Терапевт') {
-        if (this._purposeVisit !== "" && this._age !== "" && this._fullName !== "" && this._dateVisit !== "") {
-            newVisit = new Therapist(purpose.value, age.value, userName.value,
-                date.value, comment.value);
-            newVisit.createVisit();
-        } else {
-            alert('Попребуйте еще раз! Для записи к врачу нужно заполнить все поля!')
-        }
+    if(sel.value ==='Терапевт' && age.value !== "") {
+        newVisit = new Therapist(purpose.value, age.value, userName.value,
+            date.value, comment.value);
+        newVisit.createVisit();
+        Visit.close();
     }
-    if(select.value ==='Кардиолог') {
-        if (this._purposeVisit !== "" && this._normalPressure !== "" && this._massIndex !== ""
-            && this._pastIllnesses !== "" && this._age !== "" && this._fullName !== "" && this._dateVisit !== "") {
-            newVisit = new Cardiologist(purpose.value, pressure.value, indexWeight.value,
-                illness.value, age.value, userName.value, date.value, comment.value);
-            newVisit.createVisit();
-        } else {
-            alert('Попребуйте еще раз! Для записи к врачу нужно заполнить все поля!')
-        }
+    if(sel.value ==='Кардиолог' && pressure.value !== "" && indexWeight.value !== "" && illness.value !== "" && age.value !== "") {
+        newVisit = new Cardiologist(purpose.value, pressure.value, indexWeight.value,
+            illness.value, age.value, userName.value, date.value, comment.value);
+        newVisit.createVisit();
+        Visit.close();
     }
-    modalVisit.close();
 });
 
 function showText(id) {
@@ -250,44 +273,7 @@ function showText(id) {
 showText('mainCardId');
 
 let dropContainer = document.getElementById("mainCardId"); // Drag'n'Drop
-    dropContainer.onmousedown = function (e) {
-        let dropCard;
-        if (e.target.querySelectorAll(".paragraph") && !e.target.classList.contains("showMore")) {
-            dropCard = e.target.parentNode;
-        }
-        if (e.target.classList.contains("main-card")) {
-            dropCard = e.target;
-        }
-        let coords = getCoords(dropCard);
-        let dropMainContainer = document.getElementById("main");
-        let coordsContainer = getCoords(dropMainContainer);
-            let shiftX = e.pageX - coords.left;
-            let shiftY = e.pageY - coords.top;
-            let shiftYB = e.pageY - coords.bottom ;
-            let shiftXR = e.pageX - coords.right;
-            dropCard.style.position = 'absolute';
-            dropCard.style.zIndex = "999";
-            function moveAt(e) {
-                if(coordsContainer.top <= (e.pageY - shiftY) && coordsContainer.left <= (e.pageX - shiftX)
-                && coordsContainer.bottom > (e.pageY - shiftYB) && coordsContainer.right >= (e.pageX - shiftXR)) {
-                    dropCard.style.left = (e.pageX - shiftX) - 20 + 'px';
-                    dropCard.style.top = (e.pageY - shiftY) - 10 + 'px';
-                }
-            }
-
-            document.onmousemove = function (e) {
-                moveAt(e);
-            };
-
-            dropCard.onmouseup = function () {
-                document.onmousemove = null;
-                dropCard.onmouseup = null;
-            };
-            dropCard.ondragstart = function () {
-                return false;
-            };
-    };
-
+    dropContainer.addEventListener('mousedown', Visit.drag.bind(Visit)) ;
 
 function getCoords(elem) {
     let box = elem.getBoundingClientRect();
