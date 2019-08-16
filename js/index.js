@@ -186,6 +186,7 @@ class Visit {
         elemCard[6].classList.add('visit-cardio-visible');
         elemCard[7].classList.add('visit-age-visible');
         elemCard[8].classList.add('visit-dantist-visible');
+        elemCard[9].classList.add('visit-visible');
     }
 
 }
