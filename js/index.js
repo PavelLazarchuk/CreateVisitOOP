@@ -17,7 +17,7 @@ class Visit {
         this._dateVisit = dateVisit;
         this._comment = comment;
     }
-   static open() {
+    static open() {
         const overlay = document.getElementById('back');
         overlay.classList.add('modal-overlay');
         const modal = document.getElementById('modal');
@@ -153,7 +153,6 @@ class Visit {
     static visibleMove (btn) {
         const parentEl = btn.parentElement;
         const showAge = parentEl.getElementsByClassName('visit-age-visible');
-        btn.style.display = "none";
         const elemCard = parentEl.getElementsByClassName('visit-visible');
         for (let i = 0; i < elemCard.length; i + 1) {
             elemCard[i].classList.remove('visit-visible');
@@ -176,6 +175,17 @@ class Visit {
                 showDantist[j].classList.remove('visit-dantist-visible');
             }
         }
+    }
+    static invisibleMove (btn) {
+        const parentEl = btn.parentElement;
+        const elemCard = parentEl.getElementsByClassName('paragraph');
+        elemCard[2].classList.add('visit-visible');
+        elemCard[3].classList.add('visit-visible');
+        elemCard[4].classList.add('visit-cardio-visible');
+        elemCard[5].classList.add('visit-cardio-visible');
+        elemCard[6].classList.add('visit-cardio-visible');
+        elemCard[7].classList.add('visit-age-visible');
+        elemCard[8].classList.add('visit-dantist-visible');
     }
 
 }
@@ -202,10 +212,20 @@ document.addEventListener('click', function(event) {
         showText('mainCardId');
     }
 
-    if(event.target.classList.contains('showMore')) {
+
+    if(event.target.classList.contains('showMore') && event.target.innerHTML === "Показать больше...") {
         const divCard = event.target.parentNode;
+        const button = event.target;
+        button.innerHTML = "Cкрыть детали";
         divCard.classList.add('size');
-        Visit.visibleMove(event.target);
+        Visit.visibleMove(button);
+    }
+    else if(event.target.classList.contains('showMore') && event.target.innerHTML === "Cкрыть детали") {
+        const divCard = event.target.parentNode;
+        const button = event.target;
+        button.innerHTML = "Показать больше...";
+        divCard.classList.remove('size');
+        Visit.invisibleMove(button);
     }
 
     const modal = document.getElementById('modal');
