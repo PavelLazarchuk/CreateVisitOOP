@@ -74,14 +74,14 @@ class Visit {
         let divCard = document.createElement("div");
         divCard.innerHTML = `<p class="paragraph">${userName}</p>
         <p class="doctor paragraph">${select}</p>
-        <p class="visit-visible paragraph">Цель визита: ${purpose}</p>
-        <p class="visit-visible paragraph">Дата визита: ${date}</p>
-        <p class="visit-cardio-visible paragraph">Давление: ${pressure}</p>
-        <p class="visit-cardio-visible paragraph">Индекс маси тела: ${indexWeight}</p>
-        <p class="visit-cardio-visible paragraph">Заболевания: ${illness}</p>
-        <p class="visit-age-visible paragraph">Возраст: ${age}</p>
-        <p class="visit-dantist-visible paragraph">Дата последнего визита: ${lastDateVisit}</p>
-        <p class="visit-visible paragraph">Комментарий: ${comment}</p>
+        <p class="visit-visible visible paragraph">Цель визита: ${purpose}</p>
+        <p class="visit-visible visible paragraph">Дата визита: ${date}</p>
+        <p class="visit-cardio-visible cardio paragraph">Давление: ${pressure}</p>
+        <p class="visit-cardio-visible cardio paragraph">Индекс маси тела: ${indexWeight}</p>
+        <p class="visit-cardio-visible cardio paragraph">Заболевания: ${illness}</p>
+        <p class="visit-age-visible age paragraph">Возраст: ${age}</p>
+        <p class="visit-dantist-visible dantist paragraph">Дата последнего визита: ${lastDateVisit}</p>
+        <p class="visit-visible visible paragraph">Комментарий: ${comment}</p>
         <button id=${id} class="close-card">x</button>
         <button class='showMore'>Показать больше...</button>`;
         divCard.classList.add("main-card");
@@ -165,11 +165,11 @@ class Visit {
             for (let j = 0; j < showAge.length; j + 1) {
                 showAge[j].classList.remove('visit-age-visible');
             }
-        } else if (parentEl.getElementsByClassName('doctor')[0].textContent === 'Терапевт') {
+        } if (parentEl.getElementsByClassName('doctor')[0].textContent === 'Терапевт') {
             for (let j = 0; j < showAge.length; j + 1) {
                 showAge[j].classList.remove('visit-age-visible');
             }
-        } else if (parentEl.getElementsByClassName('doctor')[0].textContent === 'Дантист') {
+        } if (parentEl.getElementsByClassName('doctor')[0].textContent === 'Дантист') {
             const showDantist = parentEl.getElementsByClassName('visit-dantist-visible');
             for (let j = 0; j < showDantist.length; j + 1) {
                 showDantist[j].classList.remove('visit-dantist-visible');
@@ -178,15 +178,24 @@ class Visit {
     }
     static invisibleMove (btn) {
         const parentEl = btn.parentElement;
-        const elemCard = parentEl.getElementsByClassName('paragraph');
-        elemCard[2].classList.add('visit-visible');
-        elemCard[3].classList.add('visit-visible');
-        elemCard[4].classList.add('visit-cardio-visible');
-        elemCard[5].classList.add('visit-cardio-visible');
-        elemCard[6].classList.add('visit-cardio-visible');
-        elemCard[7].classList.add('visit-age-visible');
-        elemCard[8].classList.add('visit-dantist-visible');
-        elemCard[9].classList.add('visit-visible');
+        const visible = parentEl.getElementsByClassName('visible');
+        const cardio = parentEl.getElementsByClassName('cardio');
+        const age = parentEl.getElementsByClassName('age');
+        const dantist = parentEl.getElementsByClassName('dantist');
+        console.log(visible);
+        console.log(visible.length);
+        for (let i = 0; i < visible.length; i++) {
+            visible[i].classList.add('visit-visible');
+        }
+        for (let i = 0; i < cardio.length; i++) {
+            cardio[i].classList.add('visit-cardio-visible');
+        }
+        for (let i = 0; i < age.length; i++) {
+            age[i].classList.add('visit-age-visible');
+        }
+        for (let i = 0;i < dantist.length; i++) {
+            dantist[i].classList.add('visit-dantist-visible');
+        }
     }
 
 }
